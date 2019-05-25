@@ -1,0 +1,284 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: SF Mono, Fira Code, Fira Mono, Roboto Mono, Lucida Console, Monaco, monospace;
+  /*font-family: Roboto ;*/
+  font-size: 16px;
+  color: #222222;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.csf_logo {
+  padding: 100px  0 75px 0;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+.landing {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  padding: 5% 0 20px 0;
+}
+
+footer {
+  visibility: hidden;
+  flex-shrink: 0;
+  margin-top: 5px;
+  background-color: #222222;
+  box-shadow: 0 -2px 2px -2px #a5be00;
+}
+
+nav {
+  visibility: hidden;
+  display: none;
+  /*display: flex;*/
+  flex-direction: row;
+  position: fixed;
+  padding: 0;
+  background-color: #222222;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.hamburger {
+  flex: 1;
+  display: flex;
+  align-self: center;
+  justify-content: flex-end;
+  padding: 5px;
+  margin-right: 5px;
+  color: #ebf2fa;
+  cursor: pointer;
+}
+
+.nav_bar {
+  visibility: hidden;
+  display: none;
+}
+
+.nav_bar_home, .nav_bar_favorites, .nav_bar_about {
+  align-self: center;
+  background-color: #a5be00;
+}
+
+.nav_panel {
+  background: #222222;
+  display: none;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding: 65px 0 0 0;
+}
+
+.nav_panel_button:hover {
+  color: #a5be00;
+  background-color: #222222;
+}
+
+.nav_bar_button:hover {
+  color: #a5be00;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  border: 1px solid #a5be00;
+  margin: 50px 0 0 0;
+}
+
+
+.search-option-section {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 320px;
+}
+
+.option-switchs {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  align-content: center;
+  padding: 10px 0 10px 0;
+}
+
+.switch-row {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  align-self: center;
+  width: 100%;
+  padding: 10px 0 10px 0;
+  border: 1px solid #a5be00;
+}
+
+.switch-row-div1, .switch-row-div2 {
+  align-self: center;
+  width: 100%;
+  padding: 10px 5px 10px 5px;
+}
+
+
+
+.slider-row {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #a5be00;
+}
+
+/*-------------------------------------------*/
+/*switch begin*/
+/*-------------------------------------------*/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #a5be00;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #a5be00;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/*-------------------------------------------*/
+/*switch end*/
+/*-------------------------------------------*/
+
+/*-------------------------------------------*/
+/*bar slider begin*/
+/*-------------------------------------------*/
+.slider-row {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider-bar {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 34px; /* Specified height */
+  border-radius: 10px;
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider-bar:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider-bar::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  border-radius: 50%;
+  background: #ffffff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider-bar::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  border-radius: 50%;
+  background: #ffffff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+/*-------------------------------------------*/
+/*bar slider end*/
+/*-------------------------------------------*/
+
+
+
+@media only screen and (min-width: 525px) {
+  .nav_bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    visibility: visible;
+    margin-right: 5px;
+  }
+
+  .hamburger {
+    visibility: hidden;
+    display: none;
+  }
+
+  .search-option-section {
+    width: 500px;
+  }
+
+}
