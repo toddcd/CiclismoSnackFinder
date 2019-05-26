@@ -25,18 +25,31 @@ body {
 }
 
 .landing {
-  display: flex;
+  align-self: center;
   flex-direction: column;
   width: 500px;
   padding: 5% 0 20px 0;
 }
 
+.results {
+  text-align: center;
+  width: 320px;
+}
+
+
+
+#start-button {
+  flex: 1;
+  width: 50%;
+  padding: 10px;
+}
+
 footer {
   visibility: hidden;
-  flex-shrink: 0;
-  margin-top: 5px;
-  background-color: #222222;
-  box-shadow: 0 -2px 2px -2px #a5be00;
+  /*flex-shrink: 0;*/
+  /*margin-top: 5px;*/
+  background-color: #ffa500;
+  /*box-shadow: 0 -2px 2px -2px #a5be00;*/
 }
 
 nav {
@@ -46,7 +59,7 @@ nav {
   flex-direction: row;
   position: fixed;
   padding: 0;
-  background-color: #222222;
+  background-color: #ffa500;
   top: 0;
   left: 0;
   right: 0;
@@ -100,10 +113,8 @@ main {
   flex-direction: column;
   align-items: center;
   height: 100%;
-  border: 1px solid #a5be00;
-  margin: 50px 0 0 0;
+  margin-top: 50px;
 }
-
 
 .search-option-section {
   display: flex;
@@ -126,8 +137,8 @@ main {
   align-content: space-between;
   align-self: center;
   width: 100%;
-  padding: 10px 0 10px 0;
-  border: 1px solid #a5be00;
+  padding: 0 0 10px 0;
+  /*border: 1px solid #a5be00;*/
 }
 
 .switch-row-div1, .switch-row-div2 {
@@ -136,12 +147,30 @@ main {
   padding: 10px 5px 10px 5px;
 }
 
-
-
 .slider-row {
   width: 100%;
   padding: 20px;
+  /*border: 1px solid #a5be00;*/
+}
+
+.other-location {
+  width: 100%;
+  height: 40px;
+}
+
+.other-location-value {
+  visibility: hidden;
+  display: none;
+  width: 70%;
+  height: 36px;
+  padding: 0 5px 0 5px;
   border: 1px solid #a5be00;
+  margin: 0 15% 0 15%;
+}
+
+.find-snacks-button {
+  margin: 10px 0 0 0;
+  padding: 10px;
 }
 
 /*-------------------------------------------*/
@@ -208,6 +237,7 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+  border: 1px solid #888888;
 }
 /*-------------------------------------------*/
 /*switch end*/
@@ -217,8 +247,14 @@ input:checked + .slider:before {
 /*bar slider begin*/
 /*-------------------------------------------*/
 .slider-row {
+  display: flex;
   width: 100%; /* Width of the outside container */
 }
+
+.slider-row > div {
+  flex: 1;
+}
+
 
 /* The slider itself */
 .slider-bar {
@@ -226,7 +262,7 @@ input:checked + .slider:before {
   appearance: none;
   width: 100%; /* Full-width */
   height: 34px; /* Specified height */
-  border-radius: 10px;
+  border-radius: 20px;
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
@@ -243,16 +279,16 @@ input:checked + .slider:before {
 .slider-bar::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  width: 25px; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
+  width: 26px; /* Set a specific slider handle width */
+  height: 26px; /* Slider handle height */
   border-radius: 50%;
   background: #ffffff; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
 .slider-bar::-moz-range-thumb {
-  width: 25px; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
+  width: 26px; /* Set a specific slider handle width */
+  height: 26px; /* Slider handle height */
   border-radius: 50%;
   background: #ffffff; /* Green background */
   cursor: pointer; /* Cursor on hover */
@@ -260,8 +296,6 @@ input:checked + .slider:before {
 /*-------------------------------------------*/
 /*bar slider end*/
 /*-------------------------------------------*/
-
-
 
 @media only screen and (min-width: 525px) {
   .nav_bar {
