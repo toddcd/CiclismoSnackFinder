@@ -1,4 +1,7 @@
 'use-strict';
+const apiKey = 'AIzaSyC1knVPVY4pBlBJQM4Z7NiSOnBNipufoD0'
+const searchGeoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+const searchPlacesUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 
 $(document).ready(function () {
 
@@ -16,22 +19,134 @@ $(document).ready(function () {
     $('.start-button').click(function () {
       console.log("Start Finding Snacks!!");
       openSearchOption();
+
     });
   }
 
+  function getLocationCoords(query) {
+
+    if (query["near-me"]) {
+      let html5GeoLocationPromise = new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          resolve(
+            {
+              "lat": position.coords.latitude,
+              "lng": position.coords.longitude
+            });
+        });
+      })
+
+      html5GeoLocationPromise.then(geography => {
+
+        query['geography'] = geography;
+        openResultListPage(query);
+
+      })
+    } else {
+
+      let geography = {};
+
+      fetch(buildGeoLocationUrl(query)).then(response => {
+
+        return response.json();
+
+      }).then(responseJson => {
+
+        let lat = responseJson.results[0].geometry.location.lat;
+        let lng = responseJson.results[0].geometry.location.lng;
+
+        geography['lat'] = lat;
+        geography['lng'] = lng;
+
+        query['geography'] = geography;
+        openResultListPage(query);
+
+      }).catch(err => {
+        console.log(err);
+      });
+
+    }
+  }
+
+  function buildPlaceUrl(query) {
+    const location = query['geography'].lat+','+query['geography'].lng;
+    const params = {
+      location: location,
+      radius: query['snack-range'],
+      type: 'restaurant',
+      keyword:'street tacos', // TODO: make this dynamic
+      key: apiKey
+    }
+
+    const queryString = formatQueryParams(params);
+    const url = searchPlacesUrl + '?' + queryString;
+
+    return 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyC1knVPVY4pBlBJQM4Z7NiSOnBNipufoD0';
+  }
+
+
+  function buildGeoLocationUrl(query) {
+    const params = {
+      address: query['atl-location-address'],
+      key: apiKey
+    }
+    const queryString = formatQueryParams(params);
+    const url = searchGeoLocationUrl + '?' + queryString;
+
+    return url;
+  }
+
+  function formatQueryParams(params) {
+    const queryItems = Object.keys(params)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    return queryItems.join('&');
+  }
+
   function openResultListPage(query) {
-    console.log(query);
+    $('#main').html(
 
-    $('#main').html(`
-          
-          <div class="results">
-          <pre>
-            ${JSON.stringify(query, undefined, 2)}
-          </pre>
-          </div>
+      `<div id="map">
+
+       </div>`
+    )
+
+    const latlng = new google.maps.LatLng(query['geography'].lat, query['geography'].lng);
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: latlng,
+      zoom: 13
+    });
+
     
-    `)
 
+
+    let request = {
+      location: latlng,
+      radius: 2000,
+      types: ['street tacos']
+    }
+
+    let service =  new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, placesCallback)
+
+    //initialize();
+  }
+
+  function placesCallback (results, status){
+
+    if(status == google.maps.places.PlacesServiceStatus.OK){
+      for (let i = 0; i < results.length; i++){
+        createMarker(results[i]);
+      }
+    }
+  }
+
+  function createMarker (place){
+    let placeLoc = place.geometry.location;
+    let marker = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location
+    });
   }
 
   function openSearchOption() {
@@ -43,11 +158,11 @@ $(document).ready(function () {
         <div class="option-switchs">
         <div class="switch-row">
           <div class="switch-row-div1">
-            <label>java</label>
+            <label>coffee</label>
           </div>
           <div class="switch-row-div2">
             <label class="switch">
-              <input id="java" type="checkbox">
+              <input id="coffee" type="checkbox">
               <span class="slider round"></span>
             </label>
           </div>
@@ -101,7 +216,7 @@ $(document).ready(function () {
           </div>
           <div class="switch-row-div2">
           <label class="switch">
-            <input id="nearme-checkbox" type="checkbox">
+            <input id="near-me" type="checkbox">
             <span class="slider round"></span>
           </label>
           </div>
@@ -112,13 +227,13 @@ $(document).ready(function () {
           </div>
           <div class="switch-row-div2">
           <label class="switch">
-            <input id="location-checkbox" type="checkbox">
+            <input id="alt-location" type="checkbox">
             <span class="slider round"></span>
           </label>
           </div>
         </div>  
         <div class="location">
-          <input class="other-location-value" type="text" placeholder="   enter address" required>
+          <input id="atl-location-address"class="other-location-value" type="text" placeholder="   enter address" required>
         </div>
         </div>
           <button class="find-snacks-button" type="submit">Find Snacks</button>
@@ -138,7 +253,7 @@ $(document).ready(function () {
     });
 
     // for selecting location near me
-    $('#nearme-checkbox').click(function () {
+    $('#near-me').click(function () {
       if (this.checked) {
         toggleLocationOption("nearon");
       } else {
@@ -147,7 +262,7 @@ $(document).ready(function () {
     });
 
     // for selecting a location somewhere else
-    $('#location-checkbox').click(function () {
+    $('#alt-location').click(function () {
       if (this.checked) {
         toggleLocationOption("otheron");
       } else {
@@ -157,12 +272,13 @@ $(document).ready(function () {
 
     $('#find-snacks').submit(function (event) {
       event.preventDefault()
-      findSnacks();
+      buildSearchQueryParams();
     });
 
   }
 
-  function findSnacks() {
+  function buildSearchQueryParams() {
+
     const forms = document.querySelectorAll('#find-snacks');
     const form = forms[0];
 
@@ -173,57 +289,24 @@ $(document).ready(function () {
       let value = '';
 
       if (input.type === "checkbox") {
+
         key = input.id;
         value = input.checked;
         query[key] = value;
 
-        if (input.id === "nearme-checkbox" && input.checked) {
-
-          console.log("Nearme Location: " + getGeoLocation());
-          key = 'nearme';
-          value = getGeoLocation();
-          query[key] = value;
-
-        } else if (input.id === "location-checkbox" && input.checked) {
-
-          let address = $('.other-location-value').val();
-          key = 'other';
-          query[key] = address;
-        }
-      } else if (input.type === "range") {
+      } else if (input.type === "range" || input.type === "text") {
 
         key = input.id;
         value = input.value;
         query[key] = value;
+
       }
 
     });
 
-    openResultListPage(query);
+    getLocationCoords(query);
 
   }
-
-  function getGeoLocation(address = null) {
-    let geoLocation = "";
-
-    if (address === null) {
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          geoLocation = "lat:" + position.coords.latitude + ", lon: " + position.coords.longitude;
-        });
-
-      } else {
-        geoLocation = "Geolocation is not supported by this browser.";
-      }
-
-    } else {
-      geoLocation = address;
-    }
-
-    return geoLocation;
-  }
-
 
   function toggleLocationOption(set) {
 
