@@ -100,6 +100,7 @@ nav {
   left: 0;
   right: 0;
   z-index: 10;
+  height: 40px;
 }
 
 .hamburger {

@@ -42,7 +42,7 @@ $(document).ready(function () {
       html5GeoLocationPromise.then(geography => {
 
         query['geography'] = geography;
-        centerOfSearchLocation = geography['lat']+','+geography['lng'];
+        centerOfSearchLocation = geography['lat'] + ',' + geography['lng'];
 
         openResultListPage(query);
 
@@ -64,7 +64,7 @@ $(document).ready(function () {
         geography['lng'] = lng;
 
         query['geography'] = geography;
-        centerOfSearchLocation = geography[lat]+','+geography[lng];
+        centerOfSearchLocation = geography[lat] + ',' + geography[lng];
 
         openResultListPage(query);
 
@@ -177,29 +177,65 @@ $(document).ready(function () {
     });
   }
 
-
-
   // opens detail modal when user clicks
   // on an item in the results list
   function openModal(item) {
 
-    let placeId = item.currentTarget.attributes[1].value;
+    if (item === 'about') {
 
-    let request = {
-      placeId: placeId,
-      fields: ['name',
-               'rating',
-               'icon',
-               'website',
-               'formatted_address',
-               'formatted_phone_number',
-               'reviews',
-               'geometry']
+      $('#myModal').css('display', 'block');
+
+      let resultsHtml = `
+       
+       <div class="modal-content">
+          <div class="modal-header">
+            <img src="./img/CiclismoSnackFinderLogo.png" alt="ciclismo snack finder image">            
+            <!--<span class="close-modal">&times;</span>-->
+          </div>
+          <div class="modal-body">
+            <h2>About Ciclismo Snack Finder</h2>
+            <p>built for finding snacks while out and about</p> 
+          </div>
+          <div class="modal-footer">
+            <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
+          </div>
+        </div>
+       `
+
+      $('#myModal').html(resultsHtml);
+
+      $('#close-modal-button').click(function () {
+        $('#myModal').css('display', 'none');
+        console.log("Close Modal!!");
+      });
+
+      $(window).click(function (e) {
+        if (event.target == myModal) {
+          $('#myModal').css('display', 'none');
+          console.log("Close Modal!!");
+        }
+      });
+
+    } else {
+
+      let placeId = item.currentTarget.attributes[1].value;
+
+      let request = {
+        placeId: placeId,
+        fields: ['name',
+          'rating',
+          'icon',
+          'website',
+          'formatted_address',
+          'formatted_phone_number',
+          'reviews',
+          'geometry']
+      }
+
+      let service = new google.maps.places.PlacesService(map);
+      service.getDetails(request, placesDetailCallback)
+
     }
-
-    let service = new google.maps.places.PlacesService(map);
-    service.getDetails(request, placesDetailCallback)
-
   }
 
   function placesDetailCallback(place, status) {
@@ -273,19 +309,21 @@ $(document).ready(function () {
 
     //let oLatLng = 42.3421593+','+-71.0584656;
     let oLatLng = centerOfSearchLocation;
-    let dLatLng = place.geometry.location.lat()+","+place.geometry.location.lng();
+    let dLatLng = place.geometry.location.lat() + "," + place.geometry.location.lng();
 
-    $('#directions-button').click({origin: oLatLng,
-                                   destination: dLatLng},function (event) {
-        event.preventDefault();
-        console.log("Get Directions!!");
+    $('#directions-button').click({
+      origin: oLatLng,
+      destination: dLatLng
+    }, function (event) {
+      event.preventDefault();
+      console.log("Get Directions!!");
 
-        getDirectionsUrl(event);
+      getDirectionsUrl(event);
     });
 
   }
 
-  function getDirectionsUrl(e){
+  function getDirectionsUrl(e) {
     let mode = $("input[name='travel-mode']:checked").val();
     const params = {
       api: 1,
@@ -298,23 +336,22 @@ $(document).ready(function () {
     const url = 'https://www.google.com/maps/dir/' + '?' + queryString;
 
 
-      if( (navigator.platform.indexOf("iPhone") != -1)
-        || (navigator.platform.indexOf("iPod") != -1)
-        || (navigator.platform.indexOf("iPad") != -1))
-      {
-        window.open("maps://maps.google.com/maps?daddr=lat,long&amp;ll=");
-      }
-      else (navigator.platform.indexOf("Win32") != -1)
-      {
-        // Boston 42.3601, -71.0589
-        // Cambridge 42.3736, -71.1097
-        window.open(url);
-      }
+    if ((navigator.platform.indexOf("iPhone") != -1)
+      || (navigator.platform.indexOf("iPod") != -1)
+      || (navigator.platform.indexOf("iPad") != -1)) {
+      window.open("maps://maps.google.com/maps?daddr=lat,long&amp;ll=");
+    }
+    else (navigator.platform.indexOf("Win32") != -1)
+    {
+      // Boston 42.3601, -71.0589
+      // Cambridge 42.3736, -71.1097
+      window.open(url);
+    }
 
     $('#myModal').css('display', 'none');
     console.log("Close Modal!!");
 
-    }
+  }
 
 
   function convertRangeToMeters(range) {
@@ -440,6 +477,14 @@ $(document).ready(function () {
           <button class="find-snacks-button" type="submit">Find Snacks</button>
         </form>  
       </section>
+     <!-- Modal
+     modal is hidden until user clicks
+     on results list for more details.
+    -->
+      <div id="myModal" class="snack-modal">
+          <!-- Modal content -->
+      </div>
+    <!-- Modal -->
 `)
 
     setUpOptionsEvents();
@@ -581,6 +626,10 @@ $(document).ready(function () {
     $('#nav_panel_about').click(function () {
       closeNavPanel();
       console.log("NavPanel-Clicked About");
+      console.log("Open About Modal!!");
+
+      let item = 'about';
+      openModal(item);
     });
 
     $('#nav_bar_home').click(function () {
@@ -594,6 +643,10 @@ $(document).ready(function () {
 
     $('#nav_bar_about').click(function () {
       console.log("NavBar-Clicked About");
+      console.log("Open About Modal!!");
+
+      let item = 'about';
+      openModal(item);
     });
 
     $('.fa-bars').click(function () {
@@ -610,4 +663,5 @@ $(document).ready(function () {
 
   $(startSite());
 
-});
+})
+;
