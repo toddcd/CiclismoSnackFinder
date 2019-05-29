@@ -12,14 +12,11 @@
         integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
         crossorigin="anonymous">
   <link rel="stylesheet" href="css/main.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <!--<meta name="theme-color" content="#fafafa">-->
 </head>
 
 <body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
   <div class="content">
     <nav class="nav" role="navigation">
       <div class="logo">
@@ -37,16 +34,15 @@
       <button id="nav_panel_favorites" class="nav_panel_button" type="submit">favorites</button>
       <button id="nav_panel_about" class="nav_panel_button" type="submit">about</button>
     </div>
-    <main role="main" id="main">
-
+    <main role="main" id="main" aria-hidden="true">
     <!--Main content will be generated in javascript-->
 
 
     </main>
     <footer role="contentinfo">TD3 Studios</footer>
-  </div>
 
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1knVPVY4pBlBJQM4Z7NiSOnBNipufoD0&libraries=places"></script>
+  </div>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcyjJ1zUoocLCv9OMS5LCf-CKxPDOkHes&libraries=places"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="js/main.js"></script>
 </body>

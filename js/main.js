@@ -1,7 +1,7 @@
 'use-strict';
-const apiKey = 'AIzaSyC1knVPVY4pBlBJQM4Z7NiSOnBNipufoD0'
+const apiKey = 'AIzaSyDcyjJ1zUoocLCv9OMS5LCf-CKxPDOkHes'
 const searchGeoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
-const searchPlacesUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+let centerOfSearchLocation = '';
 
 $(document).ready(function () {
 
@@ -13,16 +13,19 @@ $(document).ready(function () {
       </header>
       <section class="landing">
         <button id="start-button" class="start-button" type="submit">Start</button>  
-      </section>
+      </section>      
 `)
 
-    $('.start-button').click(function () {
+    $('#start-button').click(function () {
       console.log("Start Finding Snacks!!");
-      openSearchOption();
+      openSearchOptions();
 
     });
+
   }
 
+  // get coords for the user current location using html5 geolocation
+  // or get coords for a user-provided location
   function getLocationCoords(query) {
 
     if (query["near-me"]) {
@@ -39,6 +42,8 @@ $(document).ready(function () {
       html5GeoLocationPromise.then(geography => {
 
         query['geography'] = geography;
+        centerOfSearchLocation = geography['lat']+','+geography['lng'];
+
         openResultListPage(query);
 
       })
@@ -59,31 +64,15 @@ $(document).ready(function () {
         geography['lng'] = lng;
 
         query['geography'] = geography;
+        centerOfSearchLocation = geography[lat]+','+geography[lng];
+
         openResultListPage(query);
 
       }).catch(err => {
         console.log(err);
       });
-
     }
   }
-
-  function buildPlaceUrl(query) {
-    const location = query['geography'].lat+','+query['geography'].lng;
-    const params = {
-      location: location,
-      radius: query['snack-range'],
-      type: 'restaurant',
-      keyword:'street tacos', // TODO: make this dynamic
-      key: apiKey
-    }
-
-    const queryString = formatQueryParams(params);
-    const url = searchPlacesUrl + '?' + queryString;
-
-    return 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyC1knVPVY4pBlBJQM4Z7NiSOnBNipufoD0';
-  }
-
 
   function buildGeoLocationUrl(query) {
     const params = {
@@ -103,45 +92,257 @@ $(document).ready(function () {
   }
 
   function openResultListPage(query) {
-    $('#main').html(
 
+    // create unordered list container
+    $('#main').html(
       `<div id="map">
 
-       </div>`
+       </div>
+
+       <div>
+          <ul id="results-list">
+            <!-- 
+              the list items will be filled in
+              after by the placesListCallback()
+              function that return data from
+              the Google places api               
+             -->
+          </ul> 
+       </div>
+       
+    <!-- Modal
+     modal is hidden until user clicks
+     on results list for more details.
+    -->
+      <div id="myModal" class="snack-modal">
+          <!-- Modal content -->
+      </div>
+    <!-- Modal -->
+`
     )
 
     const latlng = new google.maps.LatLng(query['geography'].lat, query['geography'].lng);
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: latlng,
-      zoom: 13
+      zoom: 12,
+      mapTypeId: 'terrain',
+      disableDefaultUI: true
     });
 
-    
-
+    const keywordArr = buildKeyWordList(query);
+    const range = convertRangeToMeters(query['snack-range']);
 
     let request = {
       location: latlng,
-      radius: 2000,
-      types: ['street tacos']
+      radius: range,
+      keyword: keywordArr,
+      types: ['restaurants']
     }
 
-    let service =  new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, placesCallback)
+    let placesService = new google.maps.places.PlacesService(map);
+    placesService.nearbySearch(request, placesListCallback)
 
-    //initialize();
   }
 
-  function placesCallback (results, status){
+  // takes results from Google places and builds
+  // list items for results list
+  function placesListCallback(results, status) {
 
-    if(status == google.maps.places.PlacesServiceStatus.OK){
-      for (let i = 0; i < results.length; i++){
-        createMarker(results[i]);
+    //let distanceService = new google.maps.DistanceMatrixService();
+
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      let resultList = results.map(r => {
+        createMarker(r);
+
+        return `
+          <li class="list-item open-modal" data-placeid=${r.place_id}>
+          <div class="list-item-desc">
+            <h4>${r.name}</h4>
+            <hr>
+            <p>${r.vicinity}</p>
+          </div>
+          <div class="list-item-img"></div>
+          </li>
+          `
+      }).join("\n");
+
+      $('#results-list').html(resultList);
+    }
+
+    $('.open-modal').click(function (item) {
+      console.log("Open Modal!!");
+      openModal(item);
+
+    });
+  }
+
+
+
+  // opens detail modal when user clicks
+  // on an item in the results list
+  function openModal(item) {
+
+    let placeId = item.currentTarget.attributes[1].value;
+
+    let request = {
+      placeId: placeId,
+      fields: ['name',
+               'rating',
+               'icon',
+               'website',
+               'formatted_address',
+               'formatted_phone_number',
+               'reviews',
+               'geometry']
+    }
+
+    let service = new google.maps.places.PlacesService(map);
+    service.getDetails(request, placesDetailCallback)
+
+  }
+
+  function placesDetailCallback(place, status) {
+
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+      //let modal = document.getElementById("myModal");
+      let span = document.getElementsByClassName("close")[0];
+
+      $('#myModal').css('display', 'block');
+
+      let resultsHtml = `
+       
+       <div class="modal-content">
+          <div class="modal-header">
+            <img src="./img/CiclismoSnackFinderLogo.png" alt="ciclismo snack finder image">            
+            <!--<span class="close-modal">&times;</span>-->
+          </div>
+          <div class="modal-body">
+            <h2>${place.name}</h2>
+            <div >
+              <p><a href="${place.website}" target="_blank">website</a></p>
+              <p>${place.formatted_phone_number}</p>
+              <p>${place.formatted_address}</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <form id="directions-form">
+            <div>
+              <input type="radio" id="walking" name="travel-mode" value="walking"
+                     checked>
+              <label for="walking">walking</label>
+            </div>
+           
+            <div>
+              <input type="radio" id="bicycling" name="travel-mode" value="bicycling">
+              <label for="bicycling">bicycling</label>
+            </div>
+            
+            <div>
+              <input type="radio" id="transit" name="travel-mode" value="transit">
+              <label for="transit">transit</label>
+            </div>
+            
+             <div>
+              <input type="radio" id="driving" name="travel-mode" value="driving">
+              <label for="driving">driving</label>
+            </div>
+            <button id="directions-button" class="directions-button" type="submit">directions</button>
+           </form>
+            <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
+          </div>
+        </div>
+       `
+
+      $('#myModal').html(resultsHtml);
+    }
+
+    $('#close-modal-button').click(function () {
+      $('#myModal').css('display', 'none');
+      console.log("Close Modal!!");
+    });
+
+    $(window).click(function (e) {
+      if (event.target == myModal) {
+        $('#myModal').css('display', 'none');
+        console.log("Close Modal!!");
       }
-    }
+    });
+
+
+    //let oLatLng = 42.3421593+','+-71.0584656;
+    let oLatLng = centerOfSearchLocation;
+    let dLatLng = place.geometry.location.lat()+","+place.geometry.location.lng();
+
+    $('#directions-button').click({origin: oLatLng,
+                                   destination: dLatLng},function (event) {
+        event.preventDefault();
+        console.log("Get Directions!!");
+
+        getDirectionsUrl(event);
+    });
+
   }
 
-  function createMarker (place){
+  function getDirectionsUrl(e){
+    let mode = $("input[name='travel-mode']:checked").val();
+    const params = {
+      api: 1,
+      origin: e.data.origin,
+      destination: e.data.destination,
+      travelmode: mode
+    }
+
+    const queryString = formatQueryParams(params);
+    const url = 'https://www.google.com/maps/dir/' + '?' + queryString;
+
+
+      if( (navigator.platform.indexOf("iPhone") != -1)
+        || (navigator.platform.indexOf("iPod") != -1)
+        || (navigator.platform.indexOf("iPad") != -1))
+      {
+        window.open("maps://maps.google.com/maps?daddr=lat,long&amp;ll=");
+      }
+      else (navigator.platform.indexOf("Win32") != -1)
+      {
+        // Boston 42.3601, -71.0589
+        // Cambridge 42.3736, -71.1097
+        window.open(url);
+      }
+
+    $('#myModal').css('display', 'none');
+    console.log("Close Modal!!");
+
+    }
+
+
+  function convertRangeToMeters(range) {
+    return range * 1609;
+  }
+
+  function buildKeyWordList(query) {
+    let keyword = ['']
+
+    if (query.coffee) {
+      let coffee = ['artisan', 'General', 'roaster', 'coffee', 'cold', 'brew', 'cafe'];
+      //let coffee = ['general store'];
+      keyword = keyword.concat(coffee);
+    } else if (query.bakery) {
+      let bakery = ['artisan', 'baker', 'bakery', 'cafe'];
+      keyword = keyword.concat(bakery);
+    } else if (query.tacos) {
+      let tacos = ['street', 'taco', 'tacos', 'street tacos'];
+      keyword = keyword.concat(tacos);
+    } else if (query.beer) {
+      let beer = ['microbrew', 'beer', 'brewery'];
+      keyword = keyword.concat(beer);
+    }
+    console.log("Keywords: " + keyword);
+    return keyword;
+  }
+
+  function createMarker(place) {
     let placeLoc = place.geometry.location;
     let marker = new google.maps.Marker({
       map: map,
@@ -149,7 +350,7 @@ $(document).ready(function () {
     });
   }
 
-  function openSearchOption() {
+  function openSearchOptions() {
     showNavAndFooter(true);
 
     $('#main').html(`
@@ -206,7 +407,7 @@ $(document).ready(function () {
               <span  class="snack-range-value"></span>   
             </div>
             <div>
-              <input type="range" min="0" max="20" value = "4" step="2" class="slider-bar" id="snack-range">
+              <input type="range" min="0" max="20" value = "2" step="1" class="slider-bar" id="snack-range">
             </div>    
         </div>
         <div>
@@ -233,7 +434,7 @@ $(document).ready(function () {
           </div>
         </div>  
         <div class="location">
-          <input id="atl-location-address"class="other-location-value" type="text" placeholder="   enter address" required>
+          <input id="atl-location-address"class="other-location-value" type="text" placeholder=" enter address" required>
         </div>
         </div>
           <button class="find-snacks-button" type="submit">Find Snacks</button>
@@ -271,7 +472,7 @@ $(document).ready(function () {
     });
 
     $('#find-snacks').submit(function (event) {
-      event.preventDefault()
+      event.preventDefault();
       buildSearchQueryParams();
     });
 
@@ -351,6 +552,7 @@ $(document).ready(function () {
 
   function toggleNavPanel() {
     if ($(".nav_panel").is(":hidden")) {
+
       // open the panel
       $(".nav_panel").slideDown("fast");
       $(".nav_panel").css('display', 'flex');
@@ -397,6 +599,7 @@ $(document).ready(function () {
     $('.fa-bars').click(function () {
       toggleNavPanel();
     });
+
   }
 
   function startSite() {
