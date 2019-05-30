@@ -506,7 +506,7 @@ $(document).ready(function () {
         <div class="options-spacer"></div>
           <div class="switch-row near-me">
             <div class="switch-row-div1">
-              <label>Near Me</label> 
+              <label>current location</label> 
             </div>
             <div class="switch-row-div2">
               <label class="switch">
