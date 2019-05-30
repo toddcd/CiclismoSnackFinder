@@ -35,13 +35,13 @@ body {
 }
 
 .ciclismo-img {
-  width: 320px;
+  width: 310px;
   height: auto;
   padding-bottom: 0;
 }
 
 .snack-finder-img {
-  width: 320px;
+  width: 310px;
   height: auto;
   padding-bottom: 0;
 }
@@ -81,7 +81,7 @@ body {
 .landing {
   align-self: center;
   flex-direction: column;
-  width: 500px;
+  width: 310px;
   padding: 5% 0 20px 0;
 }
 
@@ -144,7 +144,7 @@ body {
   text-transform: lowercase;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 60%;
+  width: 90%;
   text-align: center;
 }
 
@@ -573,10 +573,6 @@ input:checked + .slider:before {
 @media only screen and (min-width: 450px) {
   .search-option-section {
     width: 400px;
-  }
-
-  .start-button {
-    width: 80%;
   }
 
   #map {
