@@ -507,7 +507,7 @@ input:checked + .slider:before {
   padding: 20px;
   border: 1px solid #888;
   width: 315px;
-  height: 95%;
+  height: 100%;
 }
 
 /* Modal Content */
