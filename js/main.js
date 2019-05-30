@@ -501,7 +501,7 @@ $(document).ready(function () {
           <div class="options-spacer"></div>
           <div class="slider-row">
             <label for="snack-range">distance: <span  class="snack-range-value"></span></label>   
-            <input type="range" min="0" max="20" value = "2" step="1" class="slider-bar" id="snack-range">      
+            <input type="range" min="0" max="20" value = "1" step="1" class="slider-bar" id="snack-range">      
           </div>
         <div class="options-spacer"></div>
           <div class="switch-row near-me">
