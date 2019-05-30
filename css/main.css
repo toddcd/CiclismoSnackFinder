@@ -8,20 +8,74 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: SF Mono, Fira Code, Fira Mono, Roboto Mono, Lucida Console, Monaco, monospace;
-  /*font-family: Roboto ;*/
+  /*font-family: SF Mono, Fira Code, Fira Mono, Roboto Mono, Lucida Console, Monaco, monospace;*/
+  font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   color: #222222;
+  background-color: #ffffff;
   text-align: center;
   line-height: 1.5;
 }
 
+.nav-logo {
+  flex: 1;
+  display: flex;
+  align-self: center;
+  align-content: start;
+}
+
 .csf_logo {
+  background: url("../img/eeeeee-snackfinder-stacked-logo.png") no-repeat center center ;
+  /*background-size: cover;*/
   padding: 100px  0 75px 0;
 }
 
 .content {
   flex: 1 0 auto;
+}
+
+.ciclismo-img {
+  width: 320px;
+  height: auto;
+  padding-bottom: 0;
+}
+
+.snack-finder-img {
+  width: 320px;
+  height: auto;
+  padding-bottom: 0;
+}
+
+.main-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+
+.main-left {
+  visibility: hidden;
+  display: none;
+  flex: 1;
+  background: url("../img/eeeeee-side-logo.png") no-repeat center center ;
+  background-size: cover;
+  height: 100%;
+}
+
+.main-right {
+  visibility: hidden;
+  display: none;
+  flex: 1;
+  background: url("../img/eeeeee-side-logo.png") no-repeat center center ;
+  background-size: cover;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  height: 100%;
 }
 
 .landing {
@@ -37,7 +91,7 @@ body {
 }
 
 #map {
-  width: 300px;
+  width: 320px;
   height: 200px;
 }
 
@@ -53,38 +107,58 @@ body {
   align-self: center;
   text-align: left;
   font-size: 13px;
-  width: 95%;
+  width: 100%;
   height: auto;
   padding: 2px;
   margin: 3px;
-  border: 1px solid #a5be00;
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
   border-radius: 3px;
+  cursor: pointer;
+}
+
+#results-list li:hover {
+  border: 1px solid #bc3908;
 }
 
 .list-item-desc {
   flex: 2;
 }
 
-
 .list-item-img {
   flex: 1;
   align-self: center;
-  border-left: 1px solid #a5be00 ;
+  border-left: 1px solid #ccc981;
   border-radius: 2px;
-  background-color: #ffa500;
+  background-color: #ccc981;
 }
 
-#start-button {
-  flex: 1;
-  width: 50%;
-  padding: 10px;
+.start-button {
+  padding: 15px;
+  background-color: #eeeeee;
+  color: #000000;
+  font-size: 16px;
+  border:1px solid #a9a9a9a9;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 60%;
+  text-align: center;
 }
+
+.start-button:hover {
+  color: #bc3908;
+  border:1px solid #bc3908;
+}
+
 
 footer {
   visibility: hidden;
   /*flex-shrink: 0;*/
   /*margin-top: 5px;*/
-  background-color: #ffa500;
+  background-color: #bc3908;
   /*box-shadow: 0 -2px 2px -2px #a5be00;*/
 }
 
@@ -95,12 +169,17 @@ nav {
   flex-direction: row;
   position: fixed;
   padding: 0;
-  background-color: #ffa500;
+  background-color: #bc3908;
   top: 0;
   left: 0;
   right: 0;
   z-index: 10;
-  height: 40px;
+  height: 50px;
+}
+
+.snack-img {
+  height: 34px;
+  width: 34px;
 }
 
 .hamburger {
@@ -125,7 +204,7 @@ nav {
 }
 
 .nav_panel {
-  background: #222222;
+  background-color: #bc3908;
   display: none;
   width: 100%;
   position: fixed;
@@ -136,21 +215,50 @@ nav {
   padding: 65px 0 0 0;
 }
 
+.nav_panel_button {
+  padding: 15px;
+  background-color: #bc3908;
+  color: #ebf2fa;
+  font-size: 16px;
+  border: 0;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.nav_bar_button {
+  align-self: center;
+  padding: 15px;
+  background-color: #bc3908;
+  color: #ebf2fa;
+  font-size: 16px;
+  border: 0;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
 .nav_panel_button:hover {
-  color: #a5be00;
-  background-color: #222222;
+  color: #eeeeee;
+  background-color: #a9a9a9;
 }
 
 .nav_bar_button:hover {
-  color: #a5be00;
+  color: #eeeeee;
+  background-color: #a9a9a9;
 }
 
-main {
+#main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 5;
   height: 100%;
-  margin-top: 50px;
+  margin-top: 60px;
 }
 
 .search-option-section {
@@ -158,6 +266,23 @@ main {
   flex-direction: column;
   align-content: center;
   width: 320px;
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+}
+
+.top-options-spacer {
+  width: 100%;
+  height: 15px;
+  margin: 0 0 20px 0;
+  background-color: #eeeeee;
+}
+
+.options-spacer {
+  width: 100%;
+  height: 15px;
+  margin: 20px 0 20px 0;
+  background-color: #eeeeee;
 }
 
 .option-switchs {
@@ -165,7 +290,7 @@ main {
   flex-direction: column;
   align-content: space-between;
   align-content: center;
-  padding: 10px 0 10px 0;
+  padding: 0;
 }
 
 .switch-row {
@@ -174,7 +299,7 @@ main {
   align-content: space-between;
   align-self: center;
   width: 100%;
-  padding: 0 0 10px 0;
+  padding: 0;
   /*border: 1px solid #a5be00;*/
 }
 
@@ -185,14 +310,20 @@ main {
 }
 
 .slider-row {
-  width: 100%;
-  padding: 20px;
-  /*border: 1px solid #a5be00;*/
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  padding: 10px 0 10px 0;
 }
 
 .other-location {
   width: 100%;
   height: 40px;
+}
+
+.location {
+  width: 100%;
+  margin: 15px 0 15px 0;
 }
 
 .other-location-value {
@@ -201,13 +332,27 @@ main {
   width: 70%;
   height: 36px;
   padding: 0 5px 0 5px;
-  border: 1px solid #a5be00;
+  border: 1px solid #000000;
   margin: 0 15% 0 15%;
 }
 
 .find-snacks-button {
-  margin: 10px 0 0 0;
-  padding: 10px;
+  padding: 15px;
+  color: #000000;
+  background-color: #eeeeee;
+  font-size: 16px;
+  border: 0;
+  border-radius:0 0 0 3px;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.find-snacks-button:hover {
+  color: #bc3908;
+  border:1px solid #bc3908;
 }
 
 /*-------------------------------------------*/
@@ -218,7 +363,7 @@ main {
   position: relative;
   display: inline-block;
   width: 60px;
-  height: 34px;
+  height: 36px;
 }
 
 /* Hide default HTML checkbox */
@@ -236,7 +381,8 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #eeeeee;
+  border:1px solid #000000;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -248,17 +394,17 @@ main {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: #a9a9a9;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #a5be00;
+  background-color: #bc3908;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #a5be00;
+  box-shadow: 0 0 1px #a9a9a9;
 }
 
 input:checked + .slider:before {
@@ -274,7 +420,7 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
-  border: 1px solid #888888;
+  border: 1px solid #a9a9a9;
 }
 /*-------------------------------------------*/
 /*switch end*/
@@ -285,13 +431,13 @@ input:checked + .slider:before {
 /*-------------------------------------------*/
 .slider-row {
   display: flex;
-  width: 100%; /* Width of the outside container */
+  align-self: center;
+  width: 70%; /* Width of the outside container */
 }
 
 .slider-row > div {
   flex: 1;
 }
-
 
 /* The slider itself */
 .slider-bar {
@@ -300,9 +446,10 @@ input:checked + .slider:before {
   width: 100%; /* Full-width */
   height: 34px; /* Specified height */
   border-radius: 20px;
-  background: #d3d3d3; /* Grey background */
+  background: #eeeeee;
+  border: 1px solid #000000;
   outline: none; /* Remove outline */
-  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  /*opacity: 0.7; !* Set transparency (for mouse-over effects on hover) *!*/
   -webkit-transition: .2s; /* 0.2 seconds transition on hover */
   transition: opacity .2s;
 }
@@ -319,7 +466,7 @@ input:checked + .slider:before {
   width: 26px; /* Set a specific slider handle width */
   height: 26px; /* Slider handle height */
   border-radius: 50%;
-  background: #ffffff; /* Green background */
+  background: #a9a9a9;
   cursor: pointer; /* Cursor on hover */
 }
 
@@ -327,7 +474,7 @@ input:checked + .slider:before {
   width: 26px; /* Set a specific slider handle width */
   height: 26px; /* Slider handle height */
   border-radius: 50%;
-  background: #ffffff; /* Green background */
+  background: #a9a9a9; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 /*-------------------------------------------*/
@@ -352,6 +499,17 @@ input:checked + .slider:before {
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.modal-about-content,
+.modal-directions-content {
+  text-align: left;
+  background-color: #eeeeee;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 315px;
+  height: 80%;
+}
+
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
@@ -362,20 +520,44 @@ input:checked + .slider:before {
   height: 85%;
 }
 
-/* The Close Button */
-.close-modal {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+/* The Modal Close Button */
+.close-modal-button,
+.directions-button {
+  padding: 15px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 16px;
+  border:1px solid #a9a9a9a9;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  text-transform: lowercase;
   cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
 }
 
-.close:hover,
-.close:focus {
+.close-modal-button:hover,
+.close-modal-button:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+
+#modal-directions-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.modal-direction-footer {
+  margin-top: 15px;
+}
+
+.mode-radio-button {
+  flex: 1;
+  text-align: center;
+  padding: 5px 0 5px 0;
 }
 
 .place_id {
@@ -388,9 +570,13 @@ input:checked + .slider:before {
 /*The Modal End*/
 /*-------------------------------------------*/
 
-@media only screen and (min-width: 410px) {
+@media only screen and (min-width: 450px) {
   .search-option-section {
     width: 400px;
+  }
+
+  .start-button {
+    width: 80%;
   }
 
   #map {
@@ -402,15 +588,82 @@ input:checked + .slider:before {
     width: 400px;
   }
 
+  #main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 5 1 0;
+    height: 100%;
+    margin-top: 130px;
+  }
+
+  .main-outer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 5;
+    height: 130%;
+  }
+
+  .snack-img {
+    height: 42px;
+    width: 42px;
+  }
+
+  .ciclismo-img {
+    width: 400px;
+    height: auto;
+    padding-bottom: 20px;
+  }
+
+  .snack-finder-img {
+    width: auto;
+    height: auto;
+    padding-bottom: 0;
+  }
+
 }
 
-@media only screen and (min-width: 525px) {
+@media only screen and (min-width: 550px) {
   .nav_bar {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     visibility: visible;
     margin-right: 5px;
+  }
+
+  .start-button {
+    width: 100%;
+  }
+
+  #main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 5 1 0;
+    height: 100%;
+    margin-top: 130px;
+  }
+
+  .ciclismo-img {
+    width: auto;
+    height: auto;
+    padding-bottom: 50px;
+  }
+
+  .main-left, .main-right {
+    flex: 1;
+    visibility: visible;
+    display: block;
+  }
+
+  .main-left {
+    border-right: 1px solid #eeeeee;
+  }
+
+  .main-right {
+    border-right: 1px solid #eeeeee;
   }
 
   .hamburger {

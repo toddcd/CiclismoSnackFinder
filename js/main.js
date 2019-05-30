@@ -9,17 +9,32 @@ $(document).ready(function () {
     showNavAndFooter(false);
     $('#main').html(`
       <header class="csf_logo" role="banner">
-        <img src="./img/CiclismoSnackFinderLogo.png" alt="ciclismo snack finder image">
+        <img class="ciclismo-img" src="./img/orange-logo.png" alt="ciclismo image">
+        <img class="snack-finder-img" src="./img/snackfinder.png" alt="snack finder image">
       </header>
       <section class="landing">
-        <button id="start-button" class="start-button" type="submit">Start</button>  
-      </section>      
+        <button id="start-button" class="start-button" type="submit">start</button>  
+        <button id="start-about" class="start-button" type="submit">about</button>  
+      </section> 
+       <!-- Modal
+     modal is hidden until user clicks
+     on results list for more details.
+    -->
+      <div id="myModal" class="snack-modal">
+          <!-- Modal content -->
+      </div>
+    <!-- Modal -->     
 `)
 
     $('#start-button').click(function () {
       console.log("Start Finding Snacks!!");
       openSearchOptions();
+    });
 
+    $('#start-about').click(function () {
+      console.log("Start Finding Snacks!!");
+      let item = 'about';
+      openModal(item);
     });
 
   }
@@ -64,7 +79,7 @@ $(document).ready(function () {
         geography['lng'] = lng;
 
         query['geography'] = geography;
-        centerOfSearchLocation = geography[lat] + ',' + geography[lng];
+        centerOfSearchLocation = lat + ',' + lng;
 
         openResultListPage(query);
 
@@ -187,14 +202,19 @@ $(document).ready(function () {
 
       let resultsHtml = `
        
-       <div class="modal-content">
+       <div class="modal-about-content">
           <div class="modal-header">
-            <img src="./img/CiclismoSnackFinderLogo.png" alt="ciclismo snack finder image">            
+            <img src="./img/nav-logo-orange.png" alt="ciclismo snack finder image">            
             <!--<span class="close-modal">&times;</span>-->
           </div>
           <div class="modal-body">
-            <h2>About Ciclismo Snack Finder</h2>
-            <p>built for finding snacks while out and about</p> 
+            <hr>
+            <!--<h4>About Ciclismo Snack Finder</h4>-->
+            <p>bLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vulputate justo vitae dui tincidunt sodales.</p>
+            <br>
+            <p>Proin eros nulla, ornare et elementum quis, iaculis vel mi. Donec aliquam venenatis blandit. Nulla condimentum nulla sit amet purus dictum malesuada.</p>
+            <br>
+            <p> Nunc sed mattis odio. Nulla orci mi, luctus vel tortor ac, pulvinar ullamcorper eros. Donec non metus velit.</p> 
           </div>
           <div class="modal-footer">
             <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
@@ -249,46 +269,78 @@ $(document).ready(function () {
 
       let resultsHtml = `
        
-       <div class="modal-content">
+       <div class="modal-directions-content">
           <div class="modal-header">
-            <img src="./img/CiclismoSnackFinderLogo.png" alt="ciclismo snack finder image">            
+            <img src="./img/nav-logo-orange.png" alt="ciclismo snack finder image">            
             <!--<span class="close-modal">&times;</span>-->
           </div>
-          <div class="modal-body">
-            <h2>${place.name}</h2>
+          <div class="modal-direction-body">
+            <h2><a href="${place.website}" target="_blank">${place.name}</a></h2>
             <div >
-              <p><a href="${place.website}" target="_blank">website</a></p>
               <p>${place.formatted_phone_number}</p>
+              <br>
               <p>${place.formatted_address}</p>
             </div>
+            <br>
+            <hr>
+            <br>
           </div>
-          <div class="modal-footer">
-            <form id="directions-form">
-            <div>
-              <input type="radio" id="walking" name="travel-mode" value="walking"
-                     checked>
-              <label for="walking">walking</label>
-            </div>
-           
-            <div>
-              <input type="radio" id="bicycling" name="travel-mode" value="bicycling">
-              <label for="bicycling">bicycling</label>
-            </div>
+            <form id="modal-directions-form">
+                        
+              <div class="mode-radio-button">
+                <div>
+                  <label for="walking"><i class="fas fa-walking fa-2x"></i></label>
+                </div>
+                <div>
+                  <label class="switch">
+                    <input type="radio" id="walking" name="travel-mode" value="walking" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+                            
+              <div class="mode-radio-button">
+                <div>  
+                  <label for="bicycling"><i class="fas fa-bicycle fa-2x"></i></label>
+                </div>
+                <div>
+                  <label class="switch">
+                  <input type="radio" id="bicycling" name="travel-mode" value="bicycling">
+                  <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              
+               <div class="mode-radio-button">
+                <div>  
+                  <label for="transit"><i class="fas fa-subway fa-2x"></i></label>
+                </div>
+                <div>
+                  <label class="switch">
+                  <input type="radio" id="transit" name="travel-mode" value="transit">
+                  <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+                                                       
+              <div class="mode-radio-button">
+                <div> 
+                  <label for="driving"><i class="fas fa-car fa-2x"></i></label>
+                </div>
+                <div>
+                  <label class="switch">
+                  <input type="radio" id="driving" name="travel-mode" value="driving">
+                  <span class="slider round"></span>
+                  </label>        
+                </div>
+              </div>
             
-            <div>
-              <input type="radio" id="transit" name="travel-mode" value="transit">
-              <label for="transit">transit</label>
-            </div>
-            
-             <div>
-              <input type="radio" id="driving" name="travel-mode" value="driving">
-              <label for="driving">driving</label>
-            </div>
-            <button id="directions-button" class="directions-button" type="submit">directions</button>
            </form>
+           <div class="modal-direction-footer">
+            <button id="directions-button" class="directions-button" type="submit">directions</button>
             <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
-          </div>
-        </div>
+            </div>
+       </div>
        `
 
       $('#myModal').html(resultsHtml);
@@ -387,6 +439,8 @@ $(document).ready(function () {
     });
   }
 
+// <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 		    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 		    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
   function openSearchOptions() {
     showNavAndFooter(true);
 
@@ -394,74 +448,77 @@ $(document).ready(function () {
       <section class="search-option-section">
         <form id="find-snacks" method="get">
         <div class="option-switchs">
-        <div class="switch-row">
-          <div class="switch-row-div1">
-            <label>coffee</label>
-          </div>
-          <div class="switch-row-div2">
-            <label class="switch">
-              <input id="coffee" type="checkbox">
-              <span class="slider round"></span>
-            </label>
-          </div>
-        </div> 
-        <div class="switch-row">
-          <div class="switch-row-div1">
-            <label>bakery</label>
-          </div>
-          <div class="switch-row-div2">
-          <label class="switch">
-            <input id="bakery" type="checkbox">
-            <span class="slider round"></span>
-          </label>
-          </div>
-        </div>
-        <div class="switch-row">
-           <div class="switch-row-div1">
-            <label>tacos</label>
-           </div>
-           <div class="switch-row-div2">
-             <label class="switch">
-              <input id="tacos" type="checkbox">
-              <span class="slider round"></span>
-            </label>
-          </div>
-        </div>
-        <div class="switch-row">
-          <div class="switch-row-div1">
-          <label>beer</label> 
-          </div>
-          <div class="switch-row-div2">
-          <label class="switch">
-            <input id="beer" type="checkbox">
-            <span class="slider round"></span>
-          </label>
-          </div>
-        </div>
-        <div class="slider-row">
-            <div>
-              <label for="snack-range">distance:</label><br>
-              <span  class="snack-range-value"></span>   
+        
+        <div class="top-options-spacer"></div>
+        
+          <div class="switch-row">
+            <div class="switch-row-div1">
+              <label><img class="snack-img" src="./img/coffee.svg"></label>
             </div>
-            <div>
-              <input type="range" min="0" max="20" value = "2" step="1" class="slider-bar" id="snack-range">
-            </div>    
-        </div>
-        <div>
+            <div class="switch-row-div2">
+              <label class="switch">
+                <input id="coffee" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div> 
+        
+          <div class="switch-row">
+            <div class="switch-row-div1">
+              <label><img class="snack-img"  src="./img/muffin.svg"></label>
+            </div>
+            <div class="switch-row-div2">
+            <label class="switch">
+              <input id="bakery" type="checkbox">
+              <span class="slider round"></span>
+            </label>
+            </div>
+          </div>
+        
+          <div class="switch-row">
+             <div class="switch-row-div1">
+              <label><img class="snack-img"  src="./img/taco.svg"></label>
+             </div>
+             <div class="switch-row-div2">
+               <label class="switch">
+                <input id="tacos" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        
+          <div class="switch-row">
+            <div class="switch-row-div1">
+              <label><img class="snack-img"  src="./img/beer.svg"></i></label> 
+            </div>
+            <div class="switch-row-div2">
+            <label class="switch">
+              <input id="beer" type="checkbox">
+              <span class="slider round"></span>
+            </label>
+            </div>
+          </div>
+          <div class="options-spacer"></div>
+          <div class="slider-row">
+            <label for="snack-range">distance: <span  class="snack-range-value"></span></label>   
+            <input type="range" min="0" max="20" value = "2" step="1" class="slider-bar" id="snack-range">      
+          </div>
+        <div class="options-spacer"></div>
           <div class="switch-row near-me">
-          <div class="switch-row-div1">
-          <label>Near Me</label> 
+            <div class="switch-row-div1">
+              <label>Near Me</label> 
+            </div>
+            <div class="switch-row-div2">
+              <label class="switch">
+              <input id="near-me" type="checkbox">
+             <span class="slider round"></span>
+            </label>
+            </div>
           </div>
-          <div class="switch-row-div2">
-          <label class="switch">
-            <input id="near-me" type="checkbox">
-            <span class="slider round"></span>
-          </label>
-          </div>
-        </div>
+          
         <div class="switch-row other-location">
           <div class="switch-row-div1">
-          <label>location</label> 
+            <label>alt-location</label> 
           </div>
           <div class="switch-row-div2">
           <label class="switch">
@@ -469,13 +526,14 @@ $(document).ready(function () {
             <span class="slider round"></span>
           </label>
           </div>
-        </div>  
+        </div>
+          
         <div class="location">
           <input id="atl-location-address"class="other-location-value" type="text" placeholder=" enter address" required>
-        </div>
-        </div>
-          <button class="find-snacks-button" type="submit">Find Snacks</button>
-        </form>  
+        </div>       
+         
+        </form>
+         <button class="find-snacks-button" type="submit">Find Snacks</button>  
       </section>
      <!-- Modal
      modal is hidden until user clicks
