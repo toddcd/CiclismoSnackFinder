@@ -391,7 +391,7 @@ $(document).ready(function () {
     if ((navigator.platform.indexOf("iPhone") != -1)
       || (navigator.platform.indexOf("iPod") != -1)
       || (navigator.platform.indexOf("iPad") != -1)) {
-      window.open("maps://maps.google.com/maps?daddr=lat,long&amp;ll=");
+      window.open("maps://maps.google.com/maps?"+queryString);
     }
     else (navigator.platform.indexOf("Win32") != -1)
     {
@@ -457,7 +457,7 @@ $(document).ready(function () {
             </div>
             <div class="switch-row-div2">
               <label class="switch">
-                <input id="coffee" type="checkbox">
+                <input id="coffee"  type="radio" name="snack-mode" value="coffee" checked>
                 <span class="slider round"></span>
               </label>
             </div>
@@ -469,7 +469,7 @@ $(document).ready(function () {
             </div>
             <div class="switch-row-div2">
             <label class="switch">
-              <input id="bakery" type="checkbox">
+              <input id="bakery"   type="radio" name="snack-mode" value="bakery">
               <span class="slider round"></span>
             </label>
             </div>
@@ -481,7 +481,7 @@ $(document).ready(function () {
              </div>
              <div class="switch-row-div2">
                <label class="switch">
-                <input id="tacos" type="checkbox">
+                <input id="tacos" type="radio" name="snack-mode" value="tacos">
                 <span class="slider round"></span>
               </label>
             </div>
@@ -493,7 +493,7 @@ $(document).ready(function () {
             </div>
             <div class="switch-row-div2">
             <label class="switch">
-              <input id="beer" type="checkbox">
+              <input id="beer" type="radio" name="snack-mode" value="beer">
               <span class="slider round"></span>
             </label>
             </div>
@@ -592,11 +592,17 @@ $(document).ready(function () {
       let key = '';
       let value = '';
 
-      if (input.type === "checkbox") {
+      if (input.type === "radio") {
 
         key = input.id;
         value = input.checked;
         query[key] = value;
+
+      } else if (input.type === "checkbox") {
+
+          key = input.id;
+          value = input.checked;
+          query[key] = value;
 
       } else if (input.type === "range" || input.type === "text") {
 
