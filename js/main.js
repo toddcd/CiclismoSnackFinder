@@ -1,5 +1,9 @@
 'use-strict';
+
+// This API key is for demo purposes only and will be disabled
+// after the app is checked into the version control system
 const apiKey = 'AIzaSyDcyjJ1zUoocLCv9OMS5LCf-CKxPDOkHes'
+
 const searchGeoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 let centerOfSearchLocation = '';
 
@@ -112,14 +116,14 @@ $(document).ready(function () {
 
     let icon = '';
 
-    if(mode === 'beer'){
+    if (mode === 'beer') {
       icon = `<img class="snack-img"  src="./img/beer.svg">`
-    }else if(mode === 'coffee'){
-      icon =  `<img class="snack-img"  src="./img/coffee.svg">`
-    }else if(mode === 'bakery'){
-      icon =  `<img class="snack-img"  src="./img/muffin.svg">`
-    }else if(mode === 'tacos') {
-      icon =  `<img class="snack-img"  src="./img/taco.svg">`
+    } else if (mode === 'coffee') {
+      icon = `<img class="snack-img"  src="./img/coffee.svg">`
+    } else if (mode === 'bakery') {
+      icon = `<img class="snack-img"  src="./img/muffin.svg">`
+    } else if (mode === 'tacos') {
+      icon = `<img class="snack-img"  src="./img/taco.svg">`
     }
 
     // create unordered list container
@@ -127,10 +131,9 @@ $(document).ready(function () {
       `  <div id="map"></div>
           <div>
           <div class="search-feedback">
-            <label>
-              <i class="fas fa-arrow-circle-down"></i>${icon} close to you  
-            </label>
-            <button id="new-search" class="restart-button" type="submit">new search<i class="fas fa-arrow-circle-right"></i></button>
+            <label class="results-feedback">${icon}<i class="fas fa-2x"></i></label>
+            <div class="feedback-space"></div>
+            <button id="new-search" class="new-search-button" type="submit">new search<i class="fas fa-arrow-circle-right fa-2x"></i></button>
           </div>
           <ul id="results-list">
             <!-- 
@@ -188,6 +191,7 @@ $(document).ready(function () {
     //let distanceService = new google.maps.DistanceMatrixService();
 
     if (status == google.maps.places.PlacesServiceStatus.OK) {
+
       let resultList = results.map(r => {
         createMarker(r);
 
@@ -198,19 +202,36 @@ $(document).ready(function () {
             <hr>
             <p>${r.vicinity}</p>
           </div>
-          <div class="list-item-img"></div>
+          <!--<div class="list-item-img"></div>-->
           </li>
           `
       }).join("\n");
 
       $('#results-list').html(resultList);
+
+      $('.open-modal').click(function (item) {
+        console.log("Open Modal!!");
+        openModal(item);
+      });
+
+    } else if (status === 'ZERO_RESULTS') {
+
+      // <i class="fas fa-question"></i>
+
+      $('.results-feedback').find('i').addClass('fa-question');
+      // $('.fas').add('fa-question');
+
+      let noResults = `
+                    <li class="list-item">
+                      <div class="list-item-no-results">
+                      <p>Sorry. It looks like there were no results.</p>
+                    </div>
+                    </li>
+                        `
+      $('#results-list').html(noResults);
+
     }
 
-    $('.open-modal').click(function (item) {
-      console.log("Open Modal!!");
-      openModal(item);
-
-    });
   }
 
   // opens detail modal when user clicks
@@ -410,7 +431,7 @@ $(document).ready(function () {
     if ((navigator.platform.indexOf("iPhone") != -1)
       || (navigator.platform.indexOf("iPod") != -1)
       || (navigator.platform.indexOf("iPad") != -1)) {
-      window.open("maps://maps.google.com/maps?"+queryString);
+      window.open("maps://maps.google.com/maps?" + queryString);
     }
     else (navigator.platform.indexOf("Win32") != -1)
     {
@@ -524,7 +545,7 @@ $(document).ready(function () {
             </div>
             <div class="switch-row-div2">
               <label class="switch">
-              <input id="near-me" type="checkbox">
+              <input id="near-me" type="checkbox" required>
              <span class="slider round"></span>
             </label>
             </div>
@@ -593,6 +614,10 @@ $(document).ready(function () {
       buildSearchQueryParams();
     });
 
+    $('#near-me').oninvalid(function () {
+      alert('Please select a location option');
+    });
+
   }
 
   function buildSearchQueryParams() {
@@ -608,9 +633,9 @@ $(document).ready(function () {
 
       if (input.type === "checkbox") {
 
-          key = input.id;
-          value = input.checked;
-          query[key] = value;
+        key = input.id;
+        value = input.checked;
+        query[key] = value;
 
       } else if (input.type === "range" || input.type === "text") {
 
@@ -644,12 +669,14 @@ $(document).ready(function () {
     } else if (set === "otheron") {
 
       $('.near-me').hide("fast");
+      $('#near-me').attr('required', false);
       $('.other-location').show("fast");
       // $('.other-location-value').show("fast");
       $('.other-location-value').css('visibility', 'visible');
       $('.other-location-value').css('display', 'block');
       $('.other-location-value').attr('required', true);
       $('.other-location-value').val("");
+
 
     } else if (set === "otheroff") {
 

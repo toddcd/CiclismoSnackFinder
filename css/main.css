@@ -106,11 +106,11 @@ body {
   display: flex;
   align-self: center;
   text-align: left;
-  font-size: 13px;
+  font-size: 16px;
   width: 100%;
   height: auto;
-  padding: 2px;
-  margin: 3px;
+  padding: 5px;
+  margin: 5px;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   border-radius: 3px;
@@ -133,11 +133,20 @@ body {
   background-color: #ccc981;
 }
 
+.list-item-no-results {
+  align-self: center;
+  text-align: center;
+  padding: 2px 0 2px 0;
+}
+
 .search-feedback {
   display: flex;
   flex-direction: row;
-  align-content: center;
+  /*align-content: center;*/
+  padding: 10px 0 0 0;
 }
+
+
 
 .start-button {
   padding: 15px;
@@ -159,6 +168,43 @@ body {
   border:1px solid #bc3908;
 }
 
+.results-feedback {
+  flex: 1;
+  align-self: center;
+  display: flex;
+  align-content: start;
+
+}
+
+.results-feedback > img, i {
+  flex: 1;
+  align-self: center ;
+}
+
+.feedback-space {
+  flex: 2;
+}
+
+.new-search-button {
+  flex: 1;
+  display: flex;
+  /*align-content: end;*/
+  padding: 5px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 13px;
+  border:1px solid #eeeeee;
+  border-radius: 3px;
+  /*margin-bottom: 5px;*/
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 90%;
+}
+
+.new-search-button:hover {
+  border:1px solid #bc3908;
+}
 
 footer {
   visibility: hidden;
@@ -191,8 +237,7 @@ nav {
 .hamburger {
   flex: 1;
   display: flex;
-  align-self: center;
-  justify-content: flex-end;
+  justify-content: end;
   padding: 5px;
   margin-right: 5px;
   color: #ebf2fa;
@@ -406,7 +451,7 @@ nav {
 }
 
 input:checked + .slider {
-  background-color: #bc3908;
+  background-color: #c85d34;
 }
 
 input:focus + .slider {
@@ -426,7 +471,7 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
-  border: 1px solid #a9a9a9;
+  border: 1px solid #000000;
 }
 /*-------------------------------------------*/
 /*switch end*/
@@ -452,7 +497,7 @@ input:checked + .slider:before {
   width: 100%; /* Full-width */
   height: 34px; /* Specified height */
   border-radius: 20px;
-  background: #bc3908;
+  background: #c85d34;
   border: 1px solid #000000;
   outline: none; /* Remove outline */
   /*opacity: 0.7; !* Set transparency (for mouse-over effects on hover) *!*/
@@ -472,7 +517,8 @@ input:checked + .slider:before {
   width: 26px; /* Set a specific slider handle width */
   height: 26px; /* Slider handle height */
   border-radius: 50%;
-  background: #a9a9a9;
+  background: #eeeeee;
+  border: 1px solid #000000;
   cursor: pointer; /* Cursor on hover */
 }
 
@@ -480,7 +526,8 @@ input:checked + .slider:before {
   width: 26px; /* Set a specific slider handle width */
   height: 26px; /* Slider handle height */
   border-radius: 50%;
-  background: #a9a9a9; /* Green background */
+  background: #eeeeee;
+  border: 1px solid #000000;
   cursor: pointer; /* Cursor on hover */
 }
 /*-------------------------------------------*/
