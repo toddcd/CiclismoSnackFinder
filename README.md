@@ -2,9 +2,9 @@ Ciclismo Snack Finder
 
 http://ciclismosnackfinder.com
 
-![Alt text](./rreadme_image/ciclismosnackfinder-landingscreen.PNG "Landing Screen")
-![Alt text](./rreadme_image/ciclismosnackfinder-optionscreen.PNG "Option Screen")
-![Alt text](./rreadme_image/ciclismosnackfinder-resultscreen.PNG "Result Screen")
+![Alt text](./readme_image/ciclismosnackfinder-landingscreen.PNG "Landing Screen")
+![Alt text](./readme_image/ciclismosnackfinder-optionscreen.PNG "Option Screen")
+![Alt text](./readme_image/ciclismosnackfinder-resultscreen.PNG "Result Screen")
 
 What is Ciclismo Snack Finder?
 
