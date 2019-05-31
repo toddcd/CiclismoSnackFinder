@@ -614,9 +614,7 @@ $(document).ready(function () {
       buildSearchQueryParams();
     });
 
-    $('#near-me').oninvalid(function () {
-      alert('Please select a location option');
-    });
+   
 
   }
 
