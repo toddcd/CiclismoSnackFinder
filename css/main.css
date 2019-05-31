@@ -234,6 +234,10 @@ nav {
   width: 34px;
 }
 
+.alert{
+  color: #ff0000;
+}
+
 .hamburger {
   flex: 1;
   display: flex;
@@ -704,7 +708,7 @@ input:checked + .slider:before {
   .modal-about-content,
   .modal-directions-content {
     width: 500px;
-    height: 60%;
+    height: 80%;
   }
 
   .ciclismo-img {

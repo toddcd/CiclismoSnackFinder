@@ -168,11 +168,19 @@ $(document).ready(function () {
     const keywordArr = buildKeyWordList(query);
     const range = convertRangeToMeters(query['snack-range']);
 
+// 0: "liquor_store"​​
+// 1: "grocery_or_supermarket"
+// 2: "cafe"
+// 3: "food"
+// 4: "store"
+// 5: "point_of_interest"
+// 6: "establishment"
+
     let request = {
       location: latlng,
       radius: range,
       keyword: keywordArr,
-      types: ['restaurants']
+      types: ['restaurants','bakery','cafe','grocery_or_supermarket','bicycle_store']
     }
 
     let placesService = new google.maps.places.PlacesService(map);
@@ -191,6 +199,7 @@ $(document).ready(function () {
     //let distanceService = new google.maps.DistanceMatrixService();
 
     if (status == google.maps.places.PlacesServiceStatus.OK) {
+
 
       let resultList = results.map(r => {
         createMarker(r);
@@ -251,12 +260,13 @@ $(document).ready(function () {
           </div>
           <div class="modal-body">
             <hr>
-            <!--<h4>About Ciclismo Snack Finder</h4>-->
-            <p>bLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vulputate justo vitae dui tincidunt sodales.</p>
+            <h3>What is Ciclismo Snack Finder?</h3>
             <br>
-            <p>Proin eros nulla, ornare et elementum quis, iaculis vel mi. Donec aliquam venenatis blandit. Nulla condimentum nulla sit amet purus dictum malesuada.</p>
+            <p>Snacks are a quintessential part of cycling culture. Grabbing a pre-ride coffee, mid-ride scone, or post-ride tacos and beer can often be just as important as the ride itself.</p>
             <br>
-            <p> Nunc sed mattis odio. Nulla orci mi, luctus vel tortor ac, pulvinar ullamcorper eros. Donec non metus velit.</p> 
+            <p>Snack finder's goal is to help locate quality snacks to fill this essential need. This is done by leveraging Google's APIs along with specific keywords to target independent style establishments with artisan coffee, micro brews, or street tacos.</p>
+            <br>
+            <p>Thanks and please let me know what you think.</p> 
           </div>
           <div class="modal-footer">
             <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
@@ -281,10 +291,12 @@ $(document).ready(function () {
     } else {
 
       let placeId = item.currentTarget.attributes[1].value;
+      //let placeId = 'ChIJM0vre7fs44kRkpRi0I7uzmQ';
 
       let request = {
         placeId: placeId,
         fields: ['name',
+          'type',
           'rating',
           'icon',
           'website',
@@ -304,7 +316,6 @@ $(document).ready(function () {
 
     if (status == google.maps.places.PlacesServiceStatus.OK) {
 
-      //let modal = document.getElementById("myModal");
       let span = document.getElementsByClassName("close")[0];
 
       $('#myModal').css('display', 'block');
@@ -448,21 +459,16 @@ $(document).ready(function () {
   }
 
   function buildKeyWordList(query) {
-    let keyword = ['']
+    let keyword = []
 
     if (query.coffee) {
-      let coffee = ['artisan', 'General', 'roaster', 'coffee', 'cold', 'brew', 'cafe'];
-      //let coffee = ['general store'];
-      keyword = keyword.concat(coffee);
+      keyword = ['artisan', 'roasters', 'coffee', 'cafe'];
     } else if (query.bakery) {
-      let bakery = ['artisan', 'baker', 'bakery', 'cafe'];
-      keyword = keyword.concat(bakery);
+      keyword = ['artisan', 'baker', 'bakery', 'cafe'];
     } else if (query.tacos) {
-      let tacos = ['street', 'taco', 'tacos', 'street tacos'];
-      keyword = keyword.concat(tacos);
+      keyword = ['street', 'taco', 'tacos', 'street tacos'];
     } else if (query.beer) {
-      let beer = ['microbrew', 'beer', 'brewery'];
-      keyword = keyword.concat(beer);
+      keyword = ['microbrew', 'beer', 'brewery','brewing','craft'];
     }
     console.log("Keywords: " + keyword);
     return keyword;
@@ -539,6 +545,7 @@ $(document).ready(function () {
             <input type="range" min="0" max="20" value = "1" step="1" class="slider-bar" id="snack-range">      
           </div>
         <div class="options-spacer"></div>
+        <div class="alert"></div>
           <div class="switch-row near-me">
             <div class="switch-row-div1">
               <label>current location</label> 
@@ -614,8 +621,11 @@ $(document).ready(function () {
       buildSearchQueryParams();
     });
 
-   
 
+    $('#near-me').on('invalid', function(event){
+      console.log('must select a location option');
+      $('.alert').text('Please select a location option');
+    })
   }
 
   function buildSearchQueryParams() {
@@ -657,6 +667,7 @@ $(document).ready(function () {
 
     if (set === "nearon") {
 
+      $('.alert').text('');
       $('.other-location').hide("fast");
       $('.other-location-value').attr('required', false);
 
@@ -666,6 +677,7 @@ $(document).ready(function () {
 
     } else if (set === "otheron") {
 
+      $('.alert').text('');
       $('.near-me').hide("fast");
       $('#near-me').attr('required', false);
       $('.other-location').show("fast");
