@@ -239,7 +239,6 @@ nav {
 }
 
 .hamburger {
-  flex: 1;
   display: flex;
   justify-content: end;
   padding: 5px;
@@ -602,8 +601,9 @@ input:checked + .slider:before {
 }
 
 .modal-body {
-  padding: 15px;
-}
+   padding: 15px;
+   font-size: 13px;
+ }
 
 .email {
   padding: 5px;
@@ -699,6 +699,10 @@ input:checked + .slider:before {
     justify-content: flex-end;
     visibility: visible;
     margin-right: 5px;
+  }
+
+  .modal-body {
+    font-size: 16px;
   }
 
   .start-button {
