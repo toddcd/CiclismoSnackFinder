@@ -269,7 +269,7 @@ $(document).ready(function () {
 
       let resultsHtml = `
        
-       <div class="modal-directions-content">
+       <section class="modal-directions-content">
           <div class="modal-header">
             <img src="./img/nav-logo-orange.png" alt="ciclismo snack finder image">            
             <!--<span class="close-modal">&times;</span>-->
@@ -340,7 +340,7 @@ $(document).ready(function () {
             <button id="directions-button" class="directions-button" type="submit">directions</button>
             <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
             </div>
-       </div>
+       </section>
        `
 
       $('#myModal').html(resultsHtml);
