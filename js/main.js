@@ -266,7 +266,7 @@ $(document).ready(function () {
             <br>
             <p>Snack finder's goal is to help locate quality snacks to fill this essential need. This is done by leveraging Google's APIs along with specific keywords to target independent style establishments with artisan coffee, micro brews, or street tacos.</p>
             <br>
-            <p>Thanks and please let me know what you think.</p> 
+            <p>Thanks and let me know what you think.<i class="email fas fa-envelope fa-lg"></i></p>  
           </div>
           <div class="modal-footer">
             <button id="close-modal-button" class="close-modal-button" type="submit">close</button>
@@ -286,6 +286,10 @@ $(document).ready(function () {
           $('#myModal').css('display', 'none');
           console.log("Close Modal!!");
         }
+      });
+
+      $('.email').click(function () {
+        window.open('mailto:td3studios@gmail.com?subject=Ciclismo Snack Finder', 'emailWindow');
       });
 
     } else {
