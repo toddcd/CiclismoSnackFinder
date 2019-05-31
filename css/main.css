@@ -133,6 +133,12 @@ body {
   background-color: #ccc981;
 }
 
+.search-feedback {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+}
+
 .start-button {
   padding: 15px;
   background-color: #eeeeee;
@@ -446,7 +452,7 @@ input:checked + .slider:before {
   width: 100%; /* Full-width */
   height: 34px; /* Specified height */
   border-radius: 20px;
-  background: #eeeeee;
+  background: #bc3908;
   border: 1px solid #000000;
   outline: none; /* Remove outline */
   /*opacity: 0.7; !* Set transparency (for mouse-over effects on hover) *!*/
@@ -618,6 +624,12 @@ input:checked + .slider:before {
     padding-bottom: 0;
   }
 
+  .modal-about-content,
+  .modal-directions-content {
+    width: 400px;
+    height: 60%;
+  }
+
 }
 
 @media only screen and (min-width: 550px) {
@@ -640,6 +652,12 @@ input:checked + .slider:before {
     flex: 5 1 0;
     height: 100%;
     margin-top: 130px;
+  }
+
+  .modal-about-content,
+  .modal-directions-content {
+    width: 500px;
+    height: 60%;
   }
 
   .ciclismo-img {

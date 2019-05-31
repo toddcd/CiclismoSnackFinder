@@ -108,13 +108,30 @@ $(document).ready(function () {
 
   function openResultListPage(query) {
 
+    const mode = $("input[name='snack-mode']:checked").val();
+
+    let icon = '';
+
+    if(mode === 'beer'){
+      icon = `<img class="snack-img"  src="./img/beer.svg">`
+    }else if(mode === 'coffee'){
+      icon =  `<img class="snack-img"  src="./img/coffee.svg">`
+    }else if(mode === 'bakery'){
+      icon =  `<img class="snack-img"  src="./img/muffin.svg">`
+    }else if(mode === 'tacos') {
+      icon =  `<img class="snack-img"  src="./img/taco.svg">`
+    }
+
     // create unordered list container
     $('#main').html(
-      `<div id="map">
-
-       </div>
-
-       <div>
+      `  <div id="map"></div>
+          <div>
+          <div class="search-feedback">
+            <label>
+              <i class="fas fa-arrow-circle-down"></i>${icon} close to you  
+            </label>
+            <button id="new-search" class="restart-button" type="submit">new search<i class="fas fa-arrow-circle-right"></i></button>
+          </div>
           <ul id="results-list">
             <!-- 
               the list items will be filled in
@@ -140,7 +157,7 @@ $(document).ready(function () {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: latlng,
-      zoom: 12,
+      zoom: 13,
       mapTypeId: 'terrain',
       disableDefaultUI: true
     });
@@ -157,6 +174,10 @@ $(document).ready(function () {
 
     let placesService = new google.maps.places.PlacesService(map);
     placesService.nearbySearch(request, placesListCallback)
+
+    $('#new-search').click(function ({}) {
+      openSearchOptions();
+    });
 
   }
 
@@ -358,8 +379,6 @@ $(document).ready(function () {
       }
     });
 
-
-    //let oLatLng = 42.3421593+','+-71.0584656;
     let oLatLng = centerOfSearchLocation;
     let dLatLng = place.geometry.location.lat() + "," + place.geometry.location.lng();
 
@@ -395,14 +414,11 @@ $(document).ready(function () {
     }
     else (navigator.platform.indexOf("Win32") != -1)
     {
-      // Boston 42.3601, -71.0589
-      // Cambridge 42.3736, -71.1097
       window.open(url);
     }
 
     $('#myModal').css('display', 'none');
     console.log("Close Modal!!");
-
   }
 
 
@@ -438,8 +454,6 @@ $(document).ready(function () {
       position: place.geometry.location
     });
   }
-
-// <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 		    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 		    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
   function openSearchOptions() {
     showNavAndFooter(true);
@@ -500,7 +514,7 @@ $(document).ready(function () {
           </div>
           <div class="options-spacer"></div>
           <div class="slider-row">
-            <label for="snack-range">distance: <span  class="snack-range-value"></span></label>   
+            <label for="snack-range"><span  class="snack-range-value">1</span> mile radius from:</label>   
             <input type="range" min="0" max="20" value = "1" step="1" class="slider-bar" id="snack-range">      
           </div>
         <div class="options-spacer"></div>
@@ -592,13 +606,7 @@ $(document).ready(function () {
       let key = '';
       let value = '';
 
-      if (input.type === "radio") {
-
-        key = input.id;
-        value = input.checked;
-        query[key] = value;
-
-      } else if (input.type === "checkbox") {
+      if (input.type === "checkbox") {
 
           key = input.id;
           value = input.checked;
@@ -613,6 +621,10 @@ $(document).ready(function () {
       }
 
     });
+
+    let key = $("input[name='snack-mode']:checked").val();
+
+    query[key] = true;
 
     getLocationCoords(query);
 
