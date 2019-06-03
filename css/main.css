@@ -109,7 +109,7 @@ body {
   font-size: 16px;
   width: 100%;
   height: auto;
-  padding: 5px;
+  padding: 0 10px 0 10px;
   margin: 5px;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
@@ -123,15 +123,26 @@ body {
 
 .list-item-desc {
   flex: 2;
+  flex-direction: column;
+  align-self: center;
 }
 
-.list-item-img {
-  flex: 1;
+.place-name {
   align-self: center;
-  border-left: 1px solid #ccc981;
-  border-radius: 2px;
-  background-color: #ccc981;
+  font-weight: bolder;
 }
+
+.place-address {
+  align-self: center;
+}
+
+/*.list-item-img {*/
+  /*flex: 1;*/
+  /*align-self: center;*/
+  /*border-left: 1px solid #ccc981;*/
+  /*border-radius: 2px;*/
+  /*background-color: #ccc981;*/
+/*}*/
 
 .list-item-no-results {
   align-self: center;
@@ -558,17 +569,17 @@ input:checked + .slider:before {
 .modal-about-content,
 .modal-directions-content {
   text-align: left;
-  background-color: #eeeeee;
+  background-color: #ffffff;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
   width: 315px;
-  height: 100%;
+  height: auto;
 }
 
 /* Modal Content */
 .modal-content {
-  background-color: #fefefe;
+  background-color: #ffffff;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
@@ -687,7 +698,7 @@ input:checked + .slider:before {
   .modal-about-content,
   .modal-directions-content {
     width: 400px;
-    height: 60%;
+    height: auto;
   }
 
 }
@@ -721,7 +732,8 @@ input:checked + .slider:before {
   .modal-about-content,
   .modal-directions-content {
     width: 500px;
-    height: 80%;
+    height: auto;
+
   }
 
   .ciclismo-img {

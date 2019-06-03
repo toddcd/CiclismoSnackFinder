@@ -3,8 +3,8 @@
 // This API key is for demo purposes only and will be disabled
 // after the app is checked into the version control system
 const apiKey = 'AIzaSyDcyjJ1zUoocLCv9OMS5LCf-CKxPDOkHes'
-
 const searchGeoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+const distanceService = new google.maps.DistanceMatrixService();
 let centerOfSearchLocation = '';
 
 $(document).ready(function () {
@@ -166,7 +166,7 @@ $(document).ready(function () {
     });
 
     const keywordArr = buildKeyWordList(query);
-    const range = convertRangeToMeters(query['snack-range']);
+    const range = convertMilesToMeterforRange(query['snack-range']);
 
 // 0: "liquor_store"​​
 // 1: "grocery_or_supermarket"
@@ -180,7 +180,7 @@ $(document).ready(function () {
       location: latlng,
       radius: range,
       keyword: keywordArr,
-      types: ['restaurants','bakery','cafe','grocery_or_supermarket','bicycle_store']
+      types: ['restaurants', 'bakery', 'cafe', 'grocery_or_supermarket', 'bicycle_store']
     }
 
     let placesService = new google.maps.places.PlacesService(map);
@@ -196,22 +196,35 @@ $(document).ready(function () {
   // list items for results list
   function placesListCallback(results, status) {
 
-    //let distanceService = new google.maps.DistanceMatrixService();
+    let destinationGeometry = [];
+
 
     if (status == google.maps.places.PlacesServiceStatus.OK) {
 
-
       let resultList = results.map(r => {
+
+        // this will add  maker on the map
+        // to represent the location of the place
         createMarker(r);
+
+        // add geometery so later we can make a call to the dist matrix servcie
+        destinationGeometry.push({
+          'lat': r.geometry.location.lat(),
+          'lng': r.geometry.location.lng()
+        });
 
         return `
           <li class="list-item open-modal" data-placeid=${r.place_id}>
           <div class="list-item-desc">
-            <h4>${r.name}</h4>
-            <hr>
-            <p>${r.vicinity}</p>
+            <div class="place-name"><h4>${r.name}</h4></div>
+            <div class="place-address">${r.vicinity}</div>
           </div>
-          <!--<div class="list-item-img"></div>-->
+          <div>
+            <div class="dist-matix-value">na</div>
+            <div class="rating">    
+                ${createRatingStars(r.rating)}  
+            </div>
+          </div>
           </li>
           `
       }).join("\n");
@@ -225,10 +238,7 @@ $(document).ready(function () {
 
     } else if (status === 'ZERO_RESULTS') {
 
-      // <i class="fas fa-question"></i>
-
       $('.results-feedback').find('i').addClass('fa-question');
-      // $('.fas').add('fa-question');
 
       let noResults = `
                     <li class="list-item">
@@ -241,7 +251,51 @@ $(document).ready(function () {
 
     }
 
+    getDistance(destinationGeometry);
+
   }
+
+  function getDistance(destinations) {
+
+    let geo = centerOfSearchLocation.split(',');
+    let LatLng = new google.maps.LatLng(geo[0].valueOf(), geo[1].valueOf());
+    let origins = [LatLng];
+    let distRequest = {
+      origins: origins,
+      destinations: destinations,
+      travelMode: 'WALKING'
+    }
+
+    // call service to see how far away the place is
+    distanceService.getDistanceMatrix(distRequest, distMatixCallBack);
+
+  }
+
+  // after reciving results from dist matrix
+  // update the distance for each place
+  function distMatixCallBack(result, status) {
+
+    for (let i = 0; i < result.destinationAddresses.length; i++) {
+
+      let addressTokens = result.destinationAddresses[i].split(',');
+      let dist = convertKilometersToMiles(result.rows[0].elements[i].distance.value);
+
+      console.log(addressTokens[0] + ', ' + dist + '  mi.');
+
+      $('li').each(function () {
+
+        let tokens = $(this).find('div.place-address').text().split(',');
+        if (tokens[0] === addressTokens[0]) {
+
+          $(this).find('div.dist-matix-value').text(dist+ ' mi');
+
+        }
+
+      })
+
+    }
+  }
+
 
   // opens detail modal when user clicks
   // on an item in the results list
@@ -458,8 +512,13 @@ $(document).ready(function () {
   }
 
 
-  function convertRangeToMeters(range) {
+  function convertMilesToMeterforRange(range) {
     return range * 1609;
+  }
+
+  function convertKilometersToMiles(dist) {
+    let d = dist * 0.0006213709999975145;
+    return d.toFixed(2);
   }
 
   function buildKeyWordList(query) {
@@ -468,22 +527,56 @@ $(document).ready(function () {
     if (query.coffee) {
       keyword = ['artisan', 'roasters', 'coffee', 'cafe'];
     } else if (query.bakery) {
-      keyword = ['artisan', 'baker', 'bakery', 'cafe'];
+      keyword = ['artisan', 'baker', 'bakery', 'cafe', 'pastry'];
     } else if (query.tacos) {
       keyword = ['street', 'taco', 'tacos', 'street tacos'];
     } else if (query.beer) {
-      keyword = ['microbrew', 'beer', 'brewery','brewing','craft'];
+      keyword = ['microbrew', 'beer', 'brewery', 'brewing', 'craft'];
     }
     console.log("Keywords: " + keyword);
     return keyword;
   }
 
+  // create marker so place can be identified on the map
   function createMarker(place) {
     let placeLoc = place.geometry.location;
+
     let marker = new google.maps.Marker({
       map: map,
-      position: place.geometry.location
+      position: placeLoc,
     });
+
+  }
+
+  function createRatingStars (rating){
+    const solidIcon = `<i class="fas fa-star"></i>`;
+    const halfIcon = `<i class="fas fa-star-half-alt"></i>`
+    const emptyIcon = `<i class="far fa-star"></i>`;
+    const ratingTxt = ''+rating;
+
+    let r = ratingTxt.split('.');
+    const solid = r[0].valueOf();
+    let half =  (r[1]) ? r[1].valueOf() : 0;
+
+
+    let itemHtml = ``;
+    let counter = 1;
+
+    while (counter <= 5){
+
+      if (counter <= solid){
+        itemHtml = itemHtml + solidIcon;
+        counter++;
+      }else if (counter <= 5 && (half != null && half >= 5)){
+        itemHtml = itemHtml + halfIcon;
+        half = 0;
+        counter++;
+      } else {
+        itemHtml = itemHtml + emptyIcon;
+        counter++;
+      }
+    }
+    return itemHtml;
   }
 
   function openSearchOptions() {
@@ -626,7 +719,7 @@ $(document).ready(function () {
     });
 
 
-    $('#near-me').on('invalid', function(event){
+    $('#near-me').on('invalid', function (event) {
       console.log('must select a location option');
       $('.alert').text('Please select a location option');
     })
