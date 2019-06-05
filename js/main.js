@@ -200,11 +200,13 @@ $(document).ready(function () {
 
     if (status == google.maps.places.PlacesServiceStatus.OK) {
 
+      createCLSMarker(centerOfSearchLocation);
+
       let resultList = results.map(r => {
 
         // this will add  maker on the map
         // to represent the location of the place
-        createMarker(r);
+        createPlaceMarker(r);
 
         // add geometery so later we can make a call to the dist matrix service
         destinationGeometry.push({
@@ -546,15 +548,28 @@ $(document).ready(function () {
     return keyword;
   }
 
+  // create marker for center of user search location
+  function createCLSMarker(user) {
+    const loc = user.split(',');
+    const latlng = new google.maps.LatLng(loc[0],loc[1]);
+
+    let marker = new google.maps.Marker({
+      map: map,
+      position: latlng,
+      title: 'You are here!',
+      icon: './img/csfflag_2.png'
+    });
+  }
+
   // create marker so place can be identified on the map
-  function createMarker(place) {
+  function createPlaceMarker(place) {
     let placeLoc = place.geometry.location;
 
     let marker = new google.maps.Marker({
       map: map,
       position: placeLoc,
+      title:place.name
     });
-
   }
 
   function createRatingStars (rating){
