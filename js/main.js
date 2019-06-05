@@ -231,10 +231,6 @@ $(document).ready(function () {
 
       $('#results-list').html(resultList);
 
-      $('.open-modal').click(function (item) {
-        console.log("Open Modal!!");
-        openModal(item);
-      });
 
     } else if (status === 'ZERO_RESULTS') {
 
@@ -301,6 +297,11 @@ $(document).ready(function () {
           return ($(b).attr('data-dist')) < ($(a).attr('data-dist')) ? 1 : -1;
 
         }));
+    });
+
+    $('.open-modal').click(function (item) {
+      console.log("Open Modal!!");
+      openModal(item);
     });
 
   }
