@@ -127,6 +127,15 @@ body {
   align-self: center;
 }
 
+.dist-rate {
+  display: flex;
+  flex-direction: column;
+}
+
+.dist-matix-value {
+  align-self: center;
+}
+
 .place-name {
   align-self: center;
   font-weight: bolder;

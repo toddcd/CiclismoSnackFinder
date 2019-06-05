@@ -198,7 +198,6 @@ $(document).ready(function () {
 
     let destinationGeometry = [];
 
-
     if (status == google.maps.places.PlacesServiceStatus.OK) {
 
       let resultList = results.map(r => {
@@ -207,19 +206,19 @@ $(document).ready(function () {
         // to represent the location of the place
         createMarker(r);
 
-        // add geometery so later we can make a call to the dist matrix servcie
+        // add geometery so later we can make a call to the dist matrix service
         destinationGeometry.push({
           'lat': r.geometry.location.lat(),
           'lng': r.geometry.location.lng()
         });
 
         return `
-          <li class="list-item open-modal" data-placeid=${r.place_id}>
+          <li class="list-item open-modal" data-placeid="${r.place_id}" data-dist="na">
           <div class="list-item-desc">
             <div class="place-name"><h4>${r.name}</h4></div>
             <div class="place-address">${r.vicinity}</div>
           </div>
-          <div>
+          <div class="dist-rate">
             <div class="dist-matix-value">na</div>
             <div class="rating">    
                 ${createRatingStars(r.rating)}  
@@ -227,6 +226,7 @@ $(document).ready(function () {
           </div>
           </li>
           `
+
       }).join("\n");
 
       $('#results-list').html(resultList);
@@ -265,10 +265,8 @@ $(document).ready(function () {
       destinations: destinations,
       travelMode: 'WALKING'
     }
-
     // call service to see how far away the place is
     distanceService.getDistanceMatrix(distRequest, distMatixCallBack);
-
   }
 
   // after reciving results from dist matrix
@@ -288,14 +286,24 @@ $(document).ready(function () {
         if (tokens[0] === addressTokens[0]) {
 
           $(this).find('div.dist-matix-value').text(dist+ ' mi');
+          $(this).attr('data-dist',dist);
 
         }
-
-      })
-
+      });
     }
-  }
 
+    // sort the result list
+    $("#results-list").each(function(){
+      $(this).html(
+
+        $(this).children('li').sort(function(a, b){
+
+          return ($(b).attr('data-dist')) < ($(a).attr('data-dist')) ? 1 : -1;
+
+        }));
+    });
+
+  }
 
   // opens detail modal when user clicks
   // on an item in the results list
