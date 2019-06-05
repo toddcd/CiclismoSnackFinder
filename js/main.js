@@ -162,6 +162,7 @@ $(document).ready(function () {
       center: latlng,
       zoom: 13,
       mapTypeId: 'terrain',
+      zoomControl: true,
       disableDefaultUI: true
     });
 
